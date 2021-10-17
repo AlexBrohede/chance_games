@@ -14,18 +14,32 @@ namespace chance_games
         public static void Main(string[] args)
         {
             rnd = new Random();
+            int playerBalance = 100;
 
             int Menu1 = 0;
 
             while (Menu1 != 4)
             {
-                Console.WriteLine("1 BlackJack \n2 Game not found \n3 Game not found \n4 Quit");
+                Console.WriteLine("1 BlackJack \n2 Player balance \n3 Game not found \n4 Quit");
                 Menu1 = int.Parse(Console.ReadLine());
                 if (Menu1 == 1)
                 {
                     Console.Clear();
 
-                    int player = 0; int house = 0; bool continueToDraw = false;
+                    int betAmount = 0;
+                    int player = 0;
+                    int house = 0;
+                    bool continueToDraw = false;
+
+                    Console.WriteLine($"player has {playerBalance}");
+                    Console.WriteLine($"write bet amount");
+                    betAmount = int.Parse(Console.ReadLine());
+                    while (betAmount > playerBalance)
+                    {
+                        Console.WriteLine($"You can't bet {betAmount} you only have {playerBalance}\nNew bet amount");
+                        betAmount = int.Parse(Console.ReadLine());
+                    }
+                    playerBalance -= betAmount;
 
                     //House draws twice
                     house += DrawCard("house");
@@ -35,55 +49,83 @@ namespace chance_games
                     player += DrawCard("player");
                     player += DrawCard("player");
                     Console.WriteLine($"Player now has {player}");
-
+                    //ask player to draw
                     Console.WriteLine($"Draw \n1 Yes/2 No");
                     int drawChoice = int.Parse(Console.ReadLine());
-                    if (drawChoice == 1) { continueToDraw = true; }
-                    else { continueToDraw = false; }
-
+                    if (drawChoice == 1)
+                    {
+                        continueToDraw = true;
+                    }
+                    else
+                    {
+                        continueToDraw = false;
+                    }
                     while (continueToDraw)
                     {
+                        Console.Clear();
                         player += DrawCard("player");
                         Console.WriteLine($"Player now has {player}");
-                        if (player > 21) { continueToDraw = false; }
+                        Console.WriteLine($"house has {house}");
+                        if (player > 21)
+                        {
+                            continueToDraw = false;
+                        }
                         else
                         {
                             Console.WriteLine($"Draw \n1 Yes/2 No");
                             drawChoice = int.Parse(Console.ReadLine());
-                            if (drawChoice == 1) { continueToDraw = true; }
-                            else { continueToDraw = false; }
+                            if (drawChoice == 1)
+                            {
+                                continueToDraw = true;
+                            }
+                            else
+                            {
+                                continueToDraw = false;
+                            }
                         }
                     }
+                    Console.Clear();
                     while (house < player && player <= 21)
                     {
                         house += DrawCard("house");
                         Console.WriteLine($"House now has {house}");
                     }
+                    Console.WriteLine($"Player has {player}");
 
-                    if (player > 21) { Console.WriteLine("Player busted house wins"); }
-                    else if (house > 21) { Console.WriteLine("House busted player wins"); }
-                    else if (player > house) { Console.WriteLine("Player got more than house player wins"); }
-                    else if (house > player) { Console.WriteLine("house got more than player house wins"); }
+                    if (player > 21)
+                    {
+                        Console.WriteLine($"Player busted house wins \nYou lost {betAmount}");
+                    }
+                    else if (house > 21)
+                    {
+                        Console.WriteLine($"House busted player wins {betAmount}");
+                        playerBalance += betAmount * 2;
+                    }
+                    else if (player > house)
+                    {
+                        Console.WriteLine($"Player got more than house player wins{betAmount}");
+                        playerBalance += betAmount * 2;
+                    }
+                    else if (house >= player)
+                    {
+                        Console.WriteLine($"house got more or equal to the player house wins \nYou lost {betAmount}");
+                    }
                     else { Console.WriteLine("Error"); }
-
-
-
-
-
-
-
-
-
-
 
                     Console.ReadKey();
                     Console.Clear();
                 }
                 else if (Menu1 == 2)
-                { }
+                {
+                    Console.WriteLine($"Player has {playerBalance}");
+
+                    Console.ReadKey();
+                    Console.Clear();
+                }
                 else if (Menu1 == 3)
                 { }
                 else if (Menu1 == 4) { Console.Clear(); Console.WriteLine("Stoping program"); }
+                else { Console.WriteLine("Error"); }
             }
 
         }
