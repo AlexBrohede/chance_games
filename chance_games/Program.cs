@@ -20,7 +20,7 @@ namespace chance_games
 
             while (Menu1 != 4)
             {
-                Console.WriteLine("1 BlackJack \n2 Player balance \n3 Game not found \n4 Quit");
+                Console.WriteLine("1 BlackJack \n2 Player balance \n3 Pitty wheel \n4 Quit");
                 Menu1 = int.Parse(Console.ReadLine());
                 if (Menu1 == 1)
                 {
@@ -123,7 +123,33 @@ namespace chance_games
                     Console.Clear();
                 }
                 else if (Menu1 == 3)
-                { }
+                {
+                    Console.WriteLine($"Pitty wheel pick a number after setting the limits \nPick the lowest value");
+                    int lowRnd = int.Parse(Console.ReadLine());
+                    Console.WriteLine($"Pick the high end");
+                    int highRnd = int.Parse(Console.ReadLine());
+                    Console.WriteLine($"Pick a number betweeen {lowRnd} and {highRnd}");
+                    int guess = int.Parse(Console.ReadLine());
+                    while (guess < lowRnd || guess > highRnd)
+                    {
+                        Console.WriteLine($"please pick a number between {lowRnd} and {highRnd}");
+                        guess = int.Parse(Console.ReadLine());
+                    }
+                    int wheel = rnd.Next(lowRnd, highRnd);
+                    if (wheel == guess)
+                    {
+                        Console.WriteLine($"Congratulations you won {highRnd - lowRnd}");
+                        playerBalance += (highRnd - lowRnd);
+                        Console.WriteLine($"you now have {playerBalance}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("you lost and got nothing");
+                    }
+
+                    Console.ReadKey();
+                    Console.Clear();
+                }
                 else if (Menu1 == 4) { Console.Clear(); Console.WriteLine("Stoping program"); }
                 else { Console.WriteLine("Error"); }
             }
